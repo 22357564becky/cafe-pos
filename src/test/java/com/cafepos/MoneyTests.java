@@ -7,7 +7,7 @@ class MoneyTest {
 
     @Test
     void testAddition() {
-        Money m1 = Money.of(8.00);
+        Money m1 = Money.of(5.00);
         Money m2 = Money.of(3.00);
         Money result = m1.add(m2);
         assertEquals(Money.of(5.00), result);
