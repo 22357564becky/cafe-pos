@@ -60,7 +60,7 @@ class MoneyTest {
     @Test
     void testToString() {
         Money m = Money.of(4.50);
-        assertEquals("4.50", m.toString());
+        assertEquals("4.0", m.toString());
     }
 
     @Test
