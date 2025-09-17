@@ -1,8 +1,10 @@
-package com.cafepos;
+package com.cafepos.domain;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.cafepos.common.Money;
 
 public final class Order {
     private final long id;

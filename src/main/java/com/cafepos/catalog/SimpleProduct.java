@@ -1,4 +1,6 @@
-package com.cafepos;
+package com.cafepos.catalog;
+
+import com.cafepos.common.Money;
 
 public final class SimpleProduct implements Product{
     private final String id;

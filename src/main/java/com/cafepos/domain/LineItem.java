@@ -1,6 +1,9 @@
-package com.cafepos;
+package com.cafepos.domain;
 
 import java.math.BigDecimal;
+
+import com.cafepos.catalog.Product;
+import com.cafepos.common.Money;
 
 public final class LineItem {
     private final Product product;

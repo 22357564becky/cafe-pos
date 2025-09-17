@@ -2,6 +2,8 @@ package com.cafepos;
 
 import org.junit.jupiter.api.Test;
 
+import com.cafepos.common.Money;
+
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
