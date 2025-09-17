@@ -19,9 +19,9 @@ public final class Money implements Comparable<Money> {
     public Money add(Money other) {
         return new Money(this.amount.add(other.amount));
     }
-    public Money multiply(int qty) {
-        if (qty < 0) throw new IllegalArgumentException("Cannot multiply by negative quantity");
-        return new Money(this.amount.multiply(BigDecimal.valueOf(qty)));
+    public Money multiply(BigDecimal qty) {
+        if (qty.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Cannot multiply by negative quantity");
+        return new Money(this.amount.multiply(qty));
     }
 
     @Override
@@ -46,6 +46,5 @@ public final class Money implements Comparable<Money> {
     public String toString(){
         return amount.toString();
     }
-
 
 }
