@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 public final class Money implements Comparable<Money> {
     private final BigDecimal amount;
+    
     public static Money of(double value) {
         if (value < 0) throw new IllegalArgumentException("Negative amounts not allowed");
         return new Money(BigDecimal.valueOf(value));
@@ -46,10 +47,5 @@ public final class Money implements Comparable<Money> {
         return amount.toString();
     }
 
-public static void main(String[] args) {
-    Money m1 = Money.of(2.00);
-    Money m2 = Money.of(3.00);
-    Money result = m1.add(m2);
-    System.out.println("2.00 + 3.00 = " + result); // Should print 5.00
-}
+
 }
