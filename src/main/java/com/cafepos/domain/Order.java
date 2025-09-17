@@ -14,6 +14,10 @@ public final class Order {
         this.id = id;
     }
 
+    public List<LineItem> items() {
+        return List.copyOf(items);
+    }
+
     public void addItem(LineItem li) {
         if (li.quantity() < 0) throw new IllegalArgumentException("Negative amounts not allowed");
         items.add(li);
@@ -33,6 +37,10 @@ public final class Order {
 
     public Money totalWithTax(int percent) {
         return subtotal().add(taxAtPercent(percent));
+    }
+
+    public long id(){
+        return id;
     }
 
 }
