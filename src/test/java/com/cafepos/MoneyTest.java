@@ -1,6 +1,9 @@
 package com.cafepos;
 
 import org.junit.jupiter.api.Test;
+
+import java.math.BigDecimal;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MoneyTest {
@@ -16,7 +19,7 @@ public class MoneyTest {
     @Test
     void testMultiplication() {
         Money m = Money.of(1.25);
-        Money result = m.multiply(3);
+        Money result = m.multiply(BigDecimal.valueOf(3));
         assertEquals(Money.of(3.75), result);
     }
 
@@ -36,7 +39,7 @@ public class MoneyTest {
     void testMultiplyByNegativeThrows() {
         Money m = Money.of(2.00);
         assertThrows(IllegalArgumentException.class, () -> {
-            m.multiply(-2);
+            m.multiply(BigDecimal.valueOf(-2) );
         });
     }
 
