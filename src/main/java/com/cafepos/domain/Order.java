@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cafepos.common.Money;
+import com.cafepos.payment.PaymentStrategy;
 
 public final class Order {
     private final long id;

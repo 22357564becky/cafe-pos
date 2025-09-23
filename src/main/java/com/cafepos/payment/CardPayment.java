@@ -1,4 +1,6 @@
-package com.cafepos.domain;
+package com.cafepos.payment;
+
+import com.cafepos.domain.Order;
 
 public final class CardPayment implements PaymentStrategy {
 

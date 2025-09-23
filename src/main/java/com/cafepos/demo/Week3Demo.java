@@ -3,6 +3,7 @@ package com.cafepos.demo;
 import com.cafepos.catalog.*;
 import com.cafepos.common.*;
 import com.cafepos.domain.*;
+import com.cafepos.payment.*;
 
 public final class Week3Demo {
     public static void main(String[] args) {

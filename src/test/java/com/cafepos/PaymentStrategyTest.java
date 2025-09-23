@@ -3,6 +3,7 @@ package com.cafepos;
 import com.cafepos.catalog.*;
 import com.cafepos.common.*;
 import com.cafepos.domain.*;
+import com.cafepos.payment.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
