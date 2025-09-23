@@ -24,9 +24,7 @@ public final class Order {
     }
 
     public Money subtotal() {
-        return
-                items.stream().map(LineItem::lineTotal).reduce(Money.zero()
-                        , Money::add);
+        return items.stream().map(LineItem::lineTotal).reduce(Money.zero(), Money::add);
     }
 
     public Money taxAtPercent(int percent) {
@@ -41,6 +39,12 @@ public final class Order {
 
     public long id(){
         return id;
+    }
+
+    public void pay(PaymentStrategy strategy) {
+        if (strategy == null) throw new
+                IllegalArgumentException("strategy required");
+        strategy.pay(this);
     }
 
 }
