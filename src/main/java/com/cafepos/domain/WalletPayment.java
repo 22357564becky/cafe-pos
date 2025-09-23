@@ -6,7 +6,8 @@ public final class WalletPayment implements PaymentStrategy {
     public WalletPayment(String walletId) {
         if (walletId == null || walletId.isEmpty()) {
             throw new IllegalArgumentException("Wallet ID is required");
-        }
+        }  
+        
         this.walletId = walletId;
     }
 
