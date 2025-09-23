@@ -1,12 +1,9 @@
 package com.cafepos.demo;
 
-import com.cafepos.catalog.Catalog;
-import com.cafepos.catalog.InMemoryCatalog;
-import com.cafepos.catalog.SimpleProduct;
-import com.cafepos.common.Money;
-import com.cafepos.domain.LineItem;
-import com.cafepos.domain.Order;
-import com.cafepos.domain.OrderIds;
+import com.cafepos.catalog.*;
+import com.cafepos.common.*;
+import com.cafepos.domain.*;
+
 
 public final class Week2Demo {
     public static void main(String[] args) {
