@@ -26,11 +26,5 @@ public final class Week3Demo {
         System.out.println("Order #" + order2.id() + " Total: " + order2.totalWithTax(10));
         order2.pay(new CardPayment("1234567812341234"));
 
-        Order order3 = new Order(OrderIds.next());
-        order3.addItem(new LineItem(catalog.findById("P-ESP").orElseThrow(), 2));
-        order3.addItem(new LineItem(catalog.findById("P-CCK").orElseThrow(), 1));
-        System.out.println("Order #" + order3.id() + " Total: " + order3.totalWithTax(10));
-        order3.pay(new WalletPayment("test-wallet-id"));
-
     }
 }
