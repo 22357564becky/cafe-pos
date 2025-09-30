@@ -4,6 +4,7 @@ import com.cafepos.catalog.*;
 import com.cafepos.common.*;
 import com.cafepos.domain.*;
 import com.cafepos.observer.*;
+import com.cafepos.payment.*;
 
 
 public final class Week4Demo {
@@ -16,7 +17,7 @@ public final class Week4Demo {
         order.register(new DeliveryDesk());
         order.register(new CustomerNotifier());
         order.addItem(new LineItem(catalog.findById("P-ESP").orElseThrow(), 2));
-        //order.pay(new CashPayment());
+        order.pay(new CashPayment());
         order.markReady();
     }
 }
