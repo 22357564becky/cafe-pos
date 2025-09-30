@@ -52,7 +52,7 @@ public final class Order {
         notifyObservers(this, "OrderPaid");
     }
 
-        public void register(OrderObserver o) {
+    public void register(OrderObserver o) {
         if (o == null) throw new IllegalArgumentException("Observer cannot be null");
         observers.add(o);
     }

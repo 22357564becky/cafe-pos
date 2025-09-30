@@ -13,7 +13,7 @@ public final class Week4Demo {
         catalog.add(new SimpleProduct("P-ESP", "Espresso", Money.of(2.50)));
 
         Order order = new Order(OrderIds.next());
-        order.register(new Kitchen());
+        order.register(new KitchenDisplay());
         order.register(new DeliveryDesk());
         order.register(new CustomerNotifier());
         
