@@ -16,6 +16,7 @@ public final class Week4Demo {
         order.register(new Kitchen());
         order.register(new DeliveryDesk());
         order.register(new CustomerNotifier());
+        
         order.addItem(new LineItem(catalog.findById("P-ESP").orElseThrow(), 2));
         order.pay(new CashPayment());
         order.markReady();
