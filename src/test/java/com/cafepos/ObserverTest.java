@@ -22,5 +22,30 @@ public class ObserverTest {
         o.addItem(new LineItem(p, 1));
         assertTrue(events.contains("ItemAdded"));
     }
+
+    @Test
+    public void order_paid_event() {
+        var o = new Order(1);
+        List<String> events = new ArrayList<>();
+
+        o.register((order, eventType) -> events.add(eventType));
+        o.pay(order -> {});
+
+        assertTrue(events.contains("OrderPaid"));
+    }
+
+
+
+    @Test
+    void mark_ready_notifies_observers() {
+        var o = new Order(1);
+        List<String> events = new ArrayList<>();
+
+        o.register((order, eventType) -> events.add(eventType));
+
+        o.markReady();
+
+        assertTrue(events.contains("OrderReady"));
+    }
     
 }
