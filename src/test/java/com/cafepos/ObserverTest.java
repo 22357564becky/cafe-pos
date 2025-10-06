@@ -1,4 +1,5 @@
 package com.cafepos;
+import com.cafepos.observer.OrderObserver;
 import org.junit.jupiter.api.Test;
 
 import com.cafepos.catalog.*;
@@ -46,6 +47,21 @@ public class ObserverTest {
         o.markReady();
 
         assertTrue(events.contains("OrderReady"));
+    }
+
+    @Test
+    void test_unregister() {
+        var o = new Order(1);
+        List<String> events = new ArrayList<>();
+
+        OrderObserver observer = (order, event) -> events.add(event);
+
+        o.register(observer);
+        o.unregister(observer);
+
+        o.markReady();
+
+        assertEquals(0, events.size());
     }
     
 }
