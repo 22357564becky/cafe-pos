@@ -7,13 +7,12 @@ import com.cafepos.decorator.*;
 import com.cafepos.factory.*;
 import com.cafepos.domain.*;
 
-//import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DecoratorTest {
     @Test
-    void decorator_single_asson(){
+    void decorator_single_addOn(){
         Product espresso = new SimpleProduct("P-ESP","Espresso", Money.of(2.50));
         Product withShot = new ExtraShot(espresso);
         assertEquals("Espresso + Extra Shot", withShot.name());
