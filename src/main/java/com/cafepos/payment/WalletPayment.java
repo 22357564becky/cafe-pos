@@ -15,7 +15,13 @@ public final class WalletPayment implements PaymentStrategy {
 
     @Override    
     public void pay(Order order) {
-        System.out.println("[Wallet] Customer paid " + order.totalWithTax(10) + " EUR via wallet " + walletId);    
+        String namePart = walletId.split("-wallet-id")[0];
+        String fullWalletId = namePart + "-wallet-id";
+        if (namePart.isEmpty()) {
+            throw new IllegalArgumentException("Invalid wallet ID format");
+        }
+
+        System.out.println("[Wallet] Customer paid " + order.totalWithTax(10) + " EUR via wallet " + fullWalletId);    
     }
     
 }

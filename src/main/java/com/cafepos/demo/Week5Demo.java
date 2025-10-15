@@ -5,6 +5,11 @@ import com.cafepos.domain.LineItem;
 import com.cafepos.domain.Order;
 import com.cafepos.domain.OrderIds;
 import com.cafepos.factory.ProductFactory;
+import com.cafepos.payment.PaymentStrategy;
+import com.cafepos.payment.CashPayment;
+import com.cafepos.payment.CardPayment;
+import com.cafepos.payment.WalletPayment;
+import java.util.Scanner;
 
 public final class Week5Demo {
     public static void main(String[] args) {
@@ -77,6 +82,44 @@ public final class Week5Demo {
         System.out.println("Tax (10%): $" + cliOrder.taxAtPercent(10));
         System.out.println("Total: $" + cliOrder.totalWithTax(10));
 
+        PaymentStrategy strategy = choosePaymentStrategy(scanner, cliOrder);
+        if (strategy != null) {
+            strategy.pay(cliOrder);
+        } else {
+            System.out.println("No valid payment selected. Order not paid.");
+        }
+
         scanner.close();
+    }
+
+    private static PaymentStrategy choosePaymentStrategy(Scanner scanner, Order order) {
+        System.out.println("\nSelect payment method: (cash / card / wallet)");
+        System.out.print("Method: ");
+        String method = scanner.nextLine().trim().toLowerCase();
+        switch (method) {
+            case "cash":
+                return new CashPayment();
+            case "card":
+                System.out.print("Enter card number (min 4 digits): ");
+                String card = scanner.nextLine().trim();
+                try {
+                    return new CardPayment(card);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid card: " + e.getMessage());
+                    return null;
+                }
+            case "wallet":
+                System.out.print("Enter wallet id (your name): ");
+                String wallet = scanner.nextLine().trim();
+                try {
+                    return new WalletPayment(wallet);
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid wallet id: " + e.getMessage());
+                    return null;
+                }
+            default:
+                System.out.println("Unknown payment method: " + method);
+                return null;
+        }
     }
 }
