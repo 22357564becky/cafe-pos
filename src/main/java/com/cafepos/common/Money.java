@@ -2,26 +2,52 @@ package com.cafepos.common;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+
 public final class Money implements Comparable<Money> {
     private final BigDecimal amount;
-    
+
     public static Money of(double value) {
-        if (value < 0) throw new IllegalArgumentException("Negative amounts not allowed");
+        if (value < 0)
+            throw new IllegalArgumentException("Negative amounts not allowed");
         return new Money(BigDecimal.valueOf(value));
     }
+
+    public static Money of(BigDecimal value) {
+        if (value == null)
+            throw new IllegalArgumentException("Amount required");
+        if (value.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("Negative amounts not allowed");
+        return new Money(value);
+    }
+
+    public BigDecimal asBigDecimal() {
+        return this.amount;
+    }
+
     public static Money zero() {
         return new Money(BigDecimal.ZERO);
     }
+
     private Money(BigDecimal a) {
-        if (a == null) throw new IllegalArgumentException("Amount required");
+        if (a == null)
+            throw new IllegalArgumentException("Amount required");
         this.amount = a.setScale(2, RoundingMode.HALF_UP);
     }
+
     public Money add(Money other) {
         return new Money(this.amount.add(other.amount));
     }
+
     public Money multiply(BigDecimal qty) {
-        if (qty.compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Cannot multiply by negative quantity");
+        if (qty.compareTo(BigDecimal.ZERO) < 0)
+            throw new IllegalArgumentException("Cannot multiply by negative quantity");
         return new Money(this.amount.multiply(qty));
+    }
+
+    public Money multiply(int multiplier) {
+        if (multiplier < 0)
+            throw new IllegalArgumentException("Cannot multiply by negative quantity");
+        return new Money(this.amount.multiply(BigDecimal.valueOf(multiplier)));
     }
 
     @Override
@@ -31,8 +57,10 @@ public final class Money implements Comparable<Money> {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
         Money other = (Money) obj;
         return amount.equals(other.amount);
     }
@@ -43,7 +71,7 @@ public final class Money implements Comparable<Money> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return amount.toString();
     }
 
