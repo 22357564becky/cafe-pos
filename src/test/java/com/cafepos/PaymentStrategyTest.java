@@ -21,7 +21,7 @@ public class PaymentStrategyTest {
         var order = new Order(42);
         order.addItem(new LineItem(product, 1));
 
-        final boolean[] called = {false};
+        final boolean[] called = { false };
         PaymentStrategy fakeStrategy = o -> called[0] = true;
 
         order.pay(fakeStrategy);
@@ -30,13 +30,13 @@ public class PaymentStrategyTest {
     }
 
     @Test
-    void wallet_payment_strategy(){
+    void wallet_payment_strategy() {
 
         var product = new SimpleProduct("A", "A", Money.of(5.00));
         var order = new Order(42);
         order.addItem(new LineItem(product, 1));
 
-        PaymentStrategy walletStrategy = new WalletPayment("alice-01-wallet");
+        PaymentStrategy walletStrategy = new WalletPayment("alice-wallet-id");
 
         ByteArrayOutputStream outContent = new ByteArrayOutputStream();
         System.setOut(new PrintStream(outContent));
@@ -44,9 +44,9 @@ public class PaymentStrategyTest {
         order.pay(walletStrategy);
 
         Money expectedTotal = order.totalWithTax(10);
-        String expectedOutput = "[Wallet] Customer paid " + expectedTotal + " EUR via wallet alice-01-wallet" + System.lineSeparator();
+        String expectedOutput = "[Wallet] Customer paid " + expectedTotal + " EUR via wallet alice-wallet-id"
+                + System.lineSeparator();
         assertEquals(expectedOutput, outContent.toString());
     }
 
 }
-
