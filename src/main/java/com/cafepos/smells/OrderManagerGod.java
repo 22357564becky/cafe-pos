@@ -2,10 +2,7 @@ package com.cafepos.smells;
 
 import com.cafepos.common.Money;
 import com.cafepos.factory.ProductFactory;
-import com.cafepos.pricing.DiscountPolicy;
-import com.cafepos.pricing.FixedCouponDiscount;
-import com.cafepos.pricing.LoyaltyPercentDiscount;
-import com.cafepos.pricing.NoDiscount;
+import com.cafepos.pricing.*;
 // import com.cafepos.pricing.*; // not used
 import com.cafepos.catalog.Product;
 
@@ -17,7 +14,7 @@ public class OrderManagerGod {
 
     // one big method does it all - long method smell/god class smell
     public static String process(String recipe, int qty, String paymentType, String discountCode,
-            boolean printReceipt) {
+                                 boolean printReceipt) {
         ProductFactory factory = new ProductFactory();
         Product product = factory.create(recipe);
         Money unitPrice;
@@ -42,12 +39,10 @@ public class OrderManagerGod {
         Money discounted = Money.of(subtotal.asBigDecimal().subtract(discount.asBigDecimal()));
         if (discounted.asBigDecimal().signum() < 0)
             discounted = Money.zero();
-
-        // duplicated logic - same tax calculation
-        var tax = Money.of(discounted.asBigDecimal()
-                .multiply(java.math.BigDecimal.valueOf(TAX_PERCENT))
-                .divide(java.math.BigDecimal.valueOf(100)));
-        var total = discounted.add(tax);
+        
+        FixedRateTaxPolicy taxPolicy = new FixedRateTaxPolicy(TAX_PERCENT);
+        Money tax = taxPolicy.taxOn(discounted);
+        Money total = discounted.add(tax);
 
         // payment logic should be delegated - feature envy smell
         if (paymentType != null) {
