@@ -2,6 +2,7 @@ package com.cafepos;
 
 import com.cafepos.smells.OrderManagerGod;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Week6CharacterisationTests {
@@ -23,7 +24,7 @@ public class Week6CharacterisationTests {
         // Latte (Large) base = 3.20 + 0.70 = 3.90, qty 2 => 7.80
         // 5% discount => 0.39, discounted=7.41; tax 10% => 0.74; total=8.15
         assertTrue(receipt.contains("Subtotal: 7.80"));
-        assertTrue(receipt.contains("Discount: -0.39"));
+        assertTrue(receipt.contains("Discount: - 0.39"));
         assertTrue(receipt.contains("Tax (10%): 0.74"));
         assertTrue(receipt.contains("Total: 8.15"));
     }
@@ -36,7 +37,7 @@ public class Week6CharacterisationTests {
         // 2.30; tax=0.23; total=2.53
         assertTrue(receipt.contains("Order (ESP+SHOT) x1"));
         assertTrue(receipt.contains("Subtotal: 3.30"));
-        assertTrue(receipt.contains("Discount: -1.00"));
+        assertTrue(receipt.contains("Discount: - 1.00"));
         assertTrue(receipt.contains("Tax (10%): 0.23"));
         assertTrue(receipt.contains("Total: 2.53"));
     }

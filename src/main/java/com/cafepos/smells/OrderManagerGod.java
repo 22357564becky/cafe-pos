@@ -39,7 +39,7 @@ public class OrderManagerGod {
         Money discounted = Money.of(subtotal.asBigDecimal().subtract(discount.asBigDecimal()));
         if (discounted.asBigDecimal().signum() < 0)
             discounted = Money.zero();
-        
+
         FixedRateTaxPolicy taxPolicy = new FixedRateTaxPolicy(TAX_PERCENT);
         Money tax = taxPolicy.taxOn(discounted);
         Money total = discounted.add(tax);
@@ -58,22 +58,13 @@ public class OrderManagerGod {
             }
         }
 
-        // business logic mixed with presentation logic - separation of concerns smell
-        StringBuilder receipt = new StringBuilder();
-        receipt.append("Order (").append(recipe).append(") x").append(qty).append("\n");
-        receipt.append("Subtotal: ").append(subtotal).append("\n");
-        if (discount.asBigDecimal().signum() > 0) {
-            receipt.append("Discount: -").append(discount).append("\n");
-        }
-        receipt.append("Tax (").append(TAX_PERCENT).append("%): ").append(tax).append("\n");
-        receipt.append("Total: ").append(total);
+        PricingService.PricingResult pr = new PricingService.PricingResult(subtotal, discount, tax, total);
+        ReceiptPrinter printer = new ReceiptPrinter();
+        String out = printer.format(recipe, qty, pr, TAX_PERCENT);
 
-        String out = receipt.toString();
-        // I/O operation mixed in with business logic
         if (printReceipt) {
             System.out.println(out);
         }
-
         return out;
     }
 
