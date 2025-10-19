@@ -3,8 +3,9 @@ package com.cafepos.smells;
 import com.cafepos.common.Money;
 import com.cafepos.factory.ProductFactory;
 import com.cafepos.pricing.*;
-// import com.cafepos.pricing.*; // not used
 import com.cafepos.catalog.Product;
+import com.cafepos.payment.*;
+import com.cafepos.domain.*;
 
 public class OrderManagerGod {
 
@@ -14,7 +15,7 @@ public class OrderManagerGod {
 
     // one big method does it all - long method smell/god class smell
     public static String process(String recipe, int qty, String paymentType, String discountCode,
-                                 boolean printReceipt) {
+            boolean printReceipt) {
         ProductFactory factory = new ProductFactory();
         Product product = factory.create(recipe);
         Money unitPrice;
@@ -44,17 +45,24 @@ public class OrderManagerGod {
         Money tax = taxPolicy.taxOn(discounted);
         Money total = discounted.add(tax);
 
-        // payment logic should be delegated - feature envy smell
+        // delegate payment handling to PaymentStrategy implementations
         if (paymentType != null) {
-            // string comparisons - primitive obsession smell
+            PaymentStrategy strategy = null;
             if (paymentType.equalsIgnoreCase("CASH")) {
-                System.out.println("[Cash] Customer paid " + total + " EUR");
+                strategy = new CashPayment();
             } else if (paymentType.equalsIgnoreCase("CARD")) {
-                System.out.println("[Card] Customer paid " + total + " EUR with card ****1234");
+                // previously printed masked card ****1234 - supply a placeholder card number
+                strategy = new CardPayment("00001234");
             } else if (paymentType.equalsIgnoreCase("WALLET")) {
-                System.out.println("[Wallet] Customer paid " + total + " EUR via wallet user-wallet-789");
+                strategy = new WalletPayment("user-wallet-789");
             } else {
                 System.out.println("[UnknownPayment] " + total);
+            }
+
+            if (strategy != null) {
+                Order orderToPay = new Order(OrderIds.next());
+                orderToPay.addItem(new LineItem(product, qty));
+                orderToPay.pay(strategy);
             }
         }
 
