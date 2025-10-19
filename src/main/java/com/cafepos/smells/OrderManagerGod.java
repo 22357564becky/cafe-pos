@@ -2,6 +2,11 @@ package com.cafepos.smells;
 
 import com.cafepos.common.Money;
 import com.cafepos.factory.ProductFactory;
+import com.cafepos.pricing.DiscountPolicy;
+import com.cafepos.pricing.FixedCouponDiscount;
+import com.cafepos.pricing.LoyaltyPercentDiscount;
+import com.cafepos.pricing.NoDiscount;
+// import com.cafepos.pricing.*; // not used
 import com.cafepos.catalog.Product;
 
 public class OrderManagerGod {
@@ -28,27 +33,10 @@ public class OrderManagerGod {
         // magic number and inline logic - primitive obsession smell
         if (qty <= 0)
             qty = 1;
-        Money subtotal = unitPrice.multiply(qty);
 
-        Money discount = Money.zero();
-        // using strings for busines logic - primitive obsession smell
-        if (discountCode != null) {
-            // duplicated logic -the same bigDecimal maths is repeated
-            if (discountCode.equalsIgnoreCase("LOYAL5")) {
-                // duplicated logic -the same bigDecimal maths is repeated
-                discount = Money.of(subtotal.asBigDecimal()
-                        .multiply(java.math.BigDecimal.valueOf(5))
-                        .divide(java.math.BigDecimal.valueOf(100)));
-            } else if (discountCode.equalsIgnoreCase("COUPON1")) {
-                discount = Money.of(1.00);
-            } else if (discountCode.equalsIgnoreCase("NONE")) {
-                discount = Money.zero();
-            } else {
-                discount = Money.zero();
-            }
-            // global state mutation smell
-            LAST_DISCOUNT_CODE = discountCode;
-        }
+        Money subtotal = unitPrice.multiply(java.math.BigDecimal.valueOf(qty));
+
+        Money discount = calculateDiscount(discountCode, subtotal);
 
         // duplicated logic -the same subtraction pattern could be extracted
         Money discounted = Money.of(subtotal.asBigDecimal().subtract(discount.asBigDecimal()));
@@ -92,5 +80,21 @@ public class OrderManagerGod {
         }
 
         return out;
+    }
+
+    // extracted discount calculation to reduce method complexity and duplication
+    private static Money calculateDiscount(String discountCode, Money subtotal) {
+        DiscountPolicy policy;
+        if ("LOYAL5".equalsIgnoreCase(discountCode)) {
+            policy = new LoyaltyPercentDiscount(5);
+        } else if ("COUPON1".equalsIgnoreCase(discountCode)) {
+            policy = new FixedCouponDiscount(Money.of(1.00));
+        } else {
+            policy = new NoDiscount();
+        }
+
+        // preserving previous discount behaviour
+        LAST_DISCOUNT_CODE = discountCode;
+        return policy.discountOf(subtotal);
     }
 }
