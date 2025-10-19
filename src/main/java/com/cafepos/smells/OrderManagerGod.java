@@ -9,21 +9,36 @@ import com.cafepos.domain.*;
 
 public class OrderManagerGod {
 
-    // global state smell - hard to test, shaed mutable state
-    public static int TAX_PERCENT = 10;
-    public static String LAST_DISCOUNT_CODE = null;
+    //Instance fields instead of globals
+    private final int taxPercent;
+    private String lastDiscountCode;
 
-    // one big method does it all - long method smell/god class smell
+    private final ProductFactory productFactory;
+    private final ReceiptPrinter printer;
+
+    public OrderManagerGod(int taxPercent) {
+        this.taxPercent = taxPercent;
+        this.productFactory = new ProductFactory();
+        this.printer = new ReceiptPrinter();
+    }
+
+    //no longer one whole method
     public static String process(String recipe, int qty, String paymentType, String discountCode,
-            boolean printReceipt) {
-        ProductFactory factory = new ProductFactory();
-        Product product = factory.create(recipe);
+                                 boolean printReceipt) {
+        // Delegate to instance with default dependencies
+        OrderManagerGod manager = new OrderManagerGod(10); // Default tax 10%
+        return manager.processOrder(recipe, qty, paymentType, discountCode, printReceipt);
+    }
+
+    private String processOrder(String recipe, int qty, String paymentType, String discountCode,
+                                boolean printReceipt) {
+        Product product = productFactory.create(recipe);
         Money unitPrice;
 
         // knows too much about payment strategy types - feature envy smell
         try {
-            var priced = product instanceof com.cafepos.decorator.Priced p ? p.price() : product.basePrice();
-            unitPrice = priced;
+            unitPrice = product instanceof com.cafepos.decorator.Priced p ? p.price() : product.basePrice();
+
         } catch (Exception e) {
             unitPrice = product.basePrice();
         }
@@ -41,7 +56,7 @@ public class OrderManagerGod {
         if (discounted.asBigDecimal().signum() < 0)
             discounted = Money.zero();
 
-        FixedRateTaxPolicy taxPolicy = new FixedRateTaxPolicy(TAX_PERCENT);
+        FixedRateTaxPolicy taxPolicy = new FixedRateTaxPolicy(taxPercent);
         Money tax = taxPolicy.taxOn(discounted);
         Money total = discounted.add(tax);
 
@@ -65,10 +80,9 @@ public class OrderManagerGod {
                 orderToPay.pay(strategy);
             }
         }
-
+        //extract receipt printer
         PricingService.PricingResult pr = new PricingService.PricingResult(subtotal, discount, tax, total);
-        ReceiptPrinter printer = new ReceiptPrinter();
-        String out = printer.format(recipe, qty, pr, TAX_PERCENT);
+        String out = printer.format(recipe, qty, pr, taxPercent);
 
         if (printReceipt) {
             System.out.println(out);
@@ -77,7 +91,7 @@ public class OrderManagerGod {
     }
 
     // extracted discount calculation to reduce method complexity and duplication
-    private static Money calculateDiscount(String discountCode, Money subtotal) {
+    private Money calculateDiscount(String discountCode, Money subtotal) {
         DiscountPolicy policy;
         if ("LOYAL5".equalsIgnoreCase(discountCode)) {
             policy = new LoyaltyPercentDiscount(5);
@@ -88,7 +102,11 @@ public class OrderManagerGod {
         }
 
         // preserving previous discount behaviour
-        LAST_DISCOUNT_CODE = discountCode;
+        this.lastDiscountCode = discountCode;
         return policy.discountOf(subtotal);
+    }
+
+    public String getLastDiscountCode() {
+        return lastDiscountCode;
     }
 }
