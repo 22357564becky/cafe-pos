@@ -8,7 +8,7 @@ import com.cafepos.common.Money;
 import com.cafepos.observer.OrderObserver;
 import com.cafepos.payment.PaymentStrategy;
 
-public final class Order {
+public final class Order implements OrderPublisher {
     private final long id;
     private final List<LineItem> items = new ArrayList<>();
     private final List<OrderObserver> observers = new ArrayList<>();
@@ -41,7 +41,7 @@ public final class Order {
         return subtotal().add(taxAtPercent(percent));
     }
 
-    public long id(){
+    public long id() {
         return id;
     }
 
@@ -60,12 +60,13 @@ public final class Order {
     public void unregister(OrderObserver o) {
         observers.remove(o);
     }
-
-    private void notifyObservers(Order order, String eventType) {
+    
+    public void notifyObservers(Order order, String eventType) {
         for (OrderObserver o : observers) {
             o.updated(order, eventType);
         }
     }
+
     public void markReady() {
         notifyObservers(this, "OrderReady");
     }
