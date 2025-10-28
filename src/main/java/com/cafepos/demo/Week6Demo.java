@@ -27,7 +27,7 @@ public class Week6Demo {
 
         // CLI demo
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n--- CLI Order Entry ---\n");
+        System.out.println("\n--- CLI Cafe what would you like! ---\n");
         System.out.println(
                 "Menu Codes: \nESP - Espresso\nLAT - Latte\nCAP - Cappuccino\nSHOT - Extra Shot\nOAT - Oat Milk\nSYP - Syrup\nL - Large Size\n");
 
