@@ -61,8 +61,7 @@ public class Week6CharacterisationTests {
     // PricingService test
     @Test
     void pricing_pipeline() {
-        var pricing = new PricingService(new LoyaltyPercentDiscount(5), new
-                FixedRateTaxPolicy(10));
+        var pricing = new PricingService(new LoyaltyPercentDiscount(5), new FixedRateTaxPolicy(10));
         var pr = pricing.price(Money.of(7.80));
         assertEquals(Money.of(0.39), pr.discount());
         assertEquals(Money.of(7.41),

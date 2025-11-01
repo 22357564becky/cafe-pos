@@ -9,7 +9,7 @@ import com.cafepos.domain.*;
 
 public class OrderManagerGod {
 
-    //Instance fields instead of globals
+    // Instance fields instead of globals
     private final int taxPercent;
     private String lastDiscountCode;
 
@@ -22,16 +22,16 @@ public class OrderManagerGod {
         this.printer = new ReceiptPrinter();
     }
 
-    //no longer one whole method
+    // no longer one whole method
     public static String process(String recipe, int qty, String paymentType, String discountCode,
-                                 boolean printReceipt) {
+            boolean printReceipt) {
         // Delegate to instance with default dependencies
         OrderManagerGod manager = new OrderManagerGod(10); // Default tax 10%
         return manager.processOrder(recipe, qty, paymentType, discountCode, printReceipt);
     }
 
     private String processOrder(String recipe, int qty, String paymentType, String discountCode,
-                                boolean printReceipt) {
+            boolean printReceipt) {
         Product product = productFactory.create(recipe);
         Money unitPrice;
 
@@ -80,7 +80,7 @@ public class OrderManagerGod {
                 orderToPay.pay(strategy);
             }
         }
-        //extract receipt printer
+        // extract receipt printer
         PricingService.PricingResult pr = new PricingService.PricingResult(subtotal, discount, tax, total);
         String out = printer.format(recipe, qty, pr, taxPercent);
 

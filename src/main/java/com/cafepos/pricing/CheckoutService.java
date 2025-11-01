@@ -21,7 +21,8 @@ public final class CheckoutService {
 
     public String checkout(String recipe, int qty) {
         Product product = factory.create(recipe);
-        if (qty <= 0) qty = 1;
+        if (qty <= 0)
+            qty = 1;
         Money unit = (product instanceof com.cafepos.decorator.Priced p) ? p.price() : product.basePrice();
         Money subtotal = unit.multiply(qty);
         var result = pricing.price(subtotal);
