@@ -3,7 +3,6 @@ package com.cafepos;
 import com.cafepos.command.AddItemCommand;
 import com.cafepos.command.OrderService;
 import com.cafepos.domain.*;
-import com.cafepos.catalog.*;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
