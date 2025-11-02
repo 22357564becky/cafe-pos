@@ -1,6 +1,5 @@
 package com.cafepos.demo;
 
-import com.cafepos.pricing.*;
 import com.cafepos.printing.*;
 import vendor.legacy.*;
 

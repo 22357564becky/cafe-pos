@@ -23,8 +23,8 @@ public final class OrderService {
     public void removeLastItem() {
         var items = new java.util.ArrayList<>(order.items());
         if (!items.isEmpty()) {
-            items.remove(items.size() - 1);
-            // replace item
+            items.removeLast();
+
             try {
                 var field = Order.class.getDeclaredField("items");
                 field.setAccessible(true);
@@ -41,8 +41,7 @@ public final class OrderService {
     }
 
     public void pay(PaymentStrategy strategy, int taxPercent) {
-        // Usually you'd call order.pay(strategy), here we display a payment using the
-        // computed total
+        
         var total = order.totalWithTax(taxPercent);
         strategy.pay(order);
         System.out.println("[Service] Payment processed for total " + total);

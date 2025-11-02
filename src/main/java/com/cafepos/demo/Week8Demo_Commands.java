@@ -3,6 +3,7 @@ package com.cafepos.demo;
 import com.cafepos.domain.*;
 import com.cafepos.payment.*;
 import com.cafepos.command.*;
+
 import java.util.Scanner;
 
 public final class Week8Demo_Commands {
@@ -13,7 +14,7 @@ public final class Week8Demo_Commands {
         runCliDemo();
     }
 
-    // Original scripted demo for reference
+
     private static void runScriptedDemo() {
         Order order = new Order(OrderIds.next());
         OrderService service = new OrderService(order);
@@ -23,9 +24,9 @@ public final class Week8Demo_Commands {
         remote.setSlot(2, new PayOrderCommand(service, new CardPayment("1234567890123456"), 10));
         remote.press(0);
         remote.press(1);
-        remote.undo(); // remove last add
-        remote.press(1); // add again
-        remote.press(2); // pay
+        remote.undo();
+        remote.press(1);
+        remote.press(2);
     }
 
     private static void runCliDemo() {

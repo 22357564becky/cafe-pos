@@ -1,5 +1,7 @@
 package com.cafepos.printing;
 
+import vendor.legacy.LegacyThermalPrinter;
+
 import java.nio.charset.StandardCharsets;
 
 public final class LegacyPrinterAdapter implements Printer {
@@ -10,8 +12,8 @@ public final class LegacyPrinterAdapter implements Printer {
     }
 
     @Override
-    public void print(String reciptText) {
-        byte[] escpos = reciptText.getBytes(StandardCharsets.UTF_8);
+    public void print(String receiptText) {
+        byte[] escpos = receiptText.getBytes(StandardCharsets.UTF_8);
         adaptee.legacyPrint(escpos);
     }
 }
