@@ -3,17 +3,13 @@ package com.cafepos.demo;
 import com.cafepos.domain.*;
 import com.cafepos.payment.*;
 import com.cafepos.command.*;
-
 import java.util.Scanner;
 
 public final class Week8Demo_Commands {
     public static void main(String[] args) {
-        // Run the original scripted demo
         runScriptedDemo();
-        // Run the interactive CLI demo
         runCliDemo();
     }
-
 
     private static void runScriptedDemo() {
         Order order = new Order(OrderIds.next());
@@ -24,9 +20,9 @@ public final class Week8Demo_Commands {
         remote.setSlot(2, new PayOrderCommand(service, new CardPayment("1234567890123456"), 10));
         remote.press(0);
         remote.press(1);
-        remote.undo();
-        remote.press(1);
-        remote.press(2);
+        remote.undo(); // remove last add
+        remote.press(1); // add again
+        remote.press(2); // pay
     }
 
     private static void runCliDemo() {
@@ -101,6 +97,28 @@ public final class Week8Demo_Commands {
                             remote.setSlot(2, new PayOrderCommand(service, strategy, 10));
                             remote.press(2);
                             paid = true;
+
+                            System.out.println("\n---------- RECEIPT ----------");
+                            System.out.println("Order #" + order.id());
+                            System.out.println("-------------------------");
+
+                            for (LineItem li : order.items()) {
+                                System.out.printf("%-20s x%d  €%.2f%n",
+                                        li.product().name(),
+                                        li.quantity(),
+                                        li.lineTotal().asBigDecimal().doubleValue());
+                            }
+                            System.out.println("-------------------------");
+                            System.out.printf("Subtotal:          €%.2f%n",
+                                    order.subtotal().asBigDecimal().doubleValue());
+                            System.out.printf("Tax (10%%):         €%.2f%n",
+                                    order.taxAtPercent(10).asBigDecimal().doubleValue());
+                            System.out.println("-------------------------");
+                            System.out.printf("Total:             €%.2f%n",
+                                    order.totalWithTax(10).asBigDecimal().doubleValue());
+                            System.out.println("-------------------------");
+                            System.out.println("Thank you for your order!");
+                            System.out.println("---------------------------");
                         } else {
                             System.out.println("No valid payment selected.");
                         }
@@ -108,13 +126,14 @@ public final class Week8Demo_Commands {
                     case "summary" -> {
                         System.out.println("\nOrder #" + order.id());
                         for (LineItem li : order.items()) {
-                            System.out
-                                    .println(" - " + li.product().name() + " x " + li.quantity() + " = $"
-                                            + li.lineTotal());
+                            System.out.printf(" - %-20s x%d  €%.2f%n",
+                                    li.product().name(),
+                                    li.quantity(),
+                                    li.lineTotal().asBigDecimal().doubleValue());
                         }
-                        System.out.println("Subtotal: $" + order.subtotal());
-                        System.out.println("Tax (10%): $" + order.taxAtPercent(10));
-                        System.out.println("Total: $" + order.totalWithTax(10));
+                        System.out.printf("Subtotal: €%.2f%n", order.subtotal().asBigDecimal().doubleValue());
+                        System.out.printf("Tax (10%%): €%.2f%n", order.taxAtPercent(10).asBigDecimal().doubleValue());
+                        System.out.printf("Total: €%.2f%n", order.totalWithTax(10).asBigDecimal().doubleValue());
                     }
                     case "quit" -> {
                         if (!paid && !order.items().isEmpty()) {
@@ -128,7 +147,7 @@ public final class Week8Demo_Commands {
                         System.out.println("Thank you for your Service!, please come again :)");
                         return;
                     }
-                    default -> System.out.println("Unknown command. Try add, remove, pay, summary, or quit.");
+                    default -> System.out.println("Unknown command. Try add, remove, pay, recipt, summary, or quit.");
                 }
             }
         }
