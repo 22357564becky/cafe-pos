@@ -1,3 +1,9 @@
+## Evolution
+
+We keep the application as a layered monolith for now to optimise developer velocity and reduce operational complexity. A single deployable process makes local development, refactoring and end-to-end testing straightforward — important when the product and domain models are still evolving. The codebase is organised into clear layers (catalog, pricing, payments, printing, observers) so we avoid entangling responsibilities while remaining simple to run.
+
+Natural seams for future partitioning include: Payments (isolate card/wallet logic and PCI concerns), Notifications/Observers (kitchen, delivery, customer channels), Catalog & Pricing (read-heavy services that can scale independently), and Printing/Adapters (hardware integrations). When splitting, prefer explicit contracts: REST (JSON) or gRPC for request/response APIs, and an event bus (lightweight message broker or cloud events) for notifications and async workflows. Use idempotent endpoints and versioned schemas for evolution; prefer async events to decouple availability and allow independent scaling. This keeps the system simple today but makes future extraction low-risk and incremental.
+
 I would expose the factory pattern approach to application developers because it provides a simple, consistent interface
 for creating complex objects without exposing construction details. This approach encapsulates the complexity of drink
 customization behind intuitive product codes, making the API easy to use and understand. Developers can create
